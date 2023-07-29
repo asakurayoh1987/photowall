@@ -33,7 +33,7 @@ export default defineComponent({
     return () => (
       <img
         // class="grow shrink"
-        class="m-2 bg-gray-400 bg-img-loading bg-no-repeat bg-center bg-[length:100px_100px]"
+        class=" bg-gray-400 bg-img-loading bg-no-repeat bg-center bg-[length:100px_100px]"
         ref={imgElem}
         width={width.value * scaleRadio}
         height={height.value * scaleRadio}
