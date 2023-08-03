@@ -2,6 +2,10 @@ import { defineComponent, onBeforeMount, ref, toRefs } from 'vue';
 
 export default defineComponent({
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     url: {
       type: String,
       required: true,
@@ -16,9 +20,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const scaleRadio = 0.6;
-    // const loaded = ref(false);
-    const { url, width, height } = toRefs(props);
+    const { id, url, width, height } = toRefs(props);
 
     const imgElem = ref();
 
@@ -32,11 +34,11 @@ export default defineComponent({
 
     return () => (
       <img
-        // class="grow shrink"
+        id={id.value}
         class=" bg-gray-400 bg-img-loading bg-no-repeat bg-center bg-[length:100px_100px]"
         ref={imgElem}
-        width={width.value * scaleRadio}
-        height={height.value * scaleRadio}
+        width={width.value}
+        height={height.value}
       />
     );
   },

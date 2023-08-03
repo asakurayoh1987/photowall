@@ -19,7 +19,9 @@ export default defineComponent({
       <div id="gallery">
         <div class="flex flex-wrap">
           {imageRes.value.map(({ id, url, width, height }) => {
-            return <Photo url={url} width={width} height={height} key={id} />;
+            return (
+              <Photo url={url} width={width} height={height} key={id} id={id} />
+            );
           })}
         </div>
       </div>
