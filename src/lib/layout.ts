@@ -58,8 +58,9 @@ export function layout(
         curLayoutWidth += curImg.width;
         collectedImgs.push(curImg);
 
-        const node = generateNode(graph, collectedImgs, curRadio);
+        const node = generateNode(graph, collectedImgs, curRadio, layoutWidth);
         graph.addEdge(curNode, node);
+        // 节点未处理过，则放入待处理的节点
         if (processingNodes.findIndex(item => item[0].id === node.id) < 0) {
           processingNodes.push([node, index + 1]);
         }
@@ -72,11 +73,13 @@ export function layout(
       }
     }
 
-    if (index >= total) {
-      const node = generateNode(graph, collectedImgs, curRadio);
+    // 如果已经遍历到结尾处，有尚未处理的图片，则添加节点
+    if (index >= total && collectedImgs.length > 0) {
+      const node = generateNode(graph, collectedImgs, curRadio, layoutWidth);
       graph.addEdge(curNode, node);
     }
 
+    // 开启一下行的处理
     collectedImgs.length = 0;
     curLayoutWidth = 0;
     [curNode, curIndex] = processingNodes.shift() || [undefined, -1];
@@ -103,7 +106,12 @@ function scaleToHeight(image: Image, height: number) {
   image.width *= radio;
 }
 
-function generateNode(graph: Graph, images: Image[], radio: number) {
+function generateNode(
+  graph: Graph,
+  images: Image[],
+  radio: number,
+  layoutWidth: number,
+) {
   const contentId = generateContentId(images);
   const node = graph.vertex.find(item => item.contentId === contentId);
   if (node) {
@@ -111,9 +119,15 @@ function generateNode(graph: Graph, images: Image[], radio: number) {
   }
 
   const cloneImages = JSON.parse(JSON.stringify(images)) as Image[];
-  cloneImages.forEach(item => {
+  let remain = layoutWidth;
+  cloneImages.forEach((item, index) => {
     item.height *= radio;
-    item.width *= radio;
+    if (index < cloneImages.length - 1) {
+      item.width = Math.round(item.width * radio);
+      remain = remain - item.width;
+    } else {
+      item.width = remain;
+    }
   });
 
   return graph.createNode(calcCost(radio), cloneImages, contentId);

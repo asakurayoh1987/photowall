@@ -8,6 +8,7 @@ import tailwindcss from 'tailwindcss';
 
 export default defineConfig({
   plugins: [vue(), jsx()],
+  base: './',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

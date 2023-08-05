@@ -10,8 +10,13 @@
       "name": "Launch Program",
       "runtimeArgs": [
         "-r",
-        "ts-node/register"
+        "ts-node/register",
+        "-r",
+        "tsconfig-paths/register"
       ],
+      "env": {
+        "TS_NODE_PROJECT": "${workspaceFolder}/tsconfig.node.json"
+      },
       "args": [
         "${workspaceFolder}/src/lib/index.ts"
       ]
